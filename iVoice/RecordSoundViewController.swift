@@ -11,6 +11,8 @@ import AVFoundation
 
 class RecordSoundViewController: UIViewController {
     
+    let segueId = "stopRecording"
+    
     @IBOutlet weak var recordButton: UIButton! {
         didSet {
             recordButton.isEnabled = true
@@ -46,17 +48,7 @@ class RecordSoundViewController: UIViewController {
         recordingLabel.text = "Recording.."
         recordButton.isEnabled = false
         stopRecordingButton.isEnabled = true
-        record()
-    }
-    
-    @IBAction func stopRecording(_ sender: UIButton) {
-        recordingLabel.text = "Tap to Record"
-        stopRecordingButton.isEnabled = false
-        recordButton.isEnabled = true
-        stopRecord()
-    }
-    
-    func record() {
+        
         let dirPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
         let recordingName = "recordedVoice.wav"
         let pathArray = [dirPath, recordingName]
@@ -72,26 +64,33 @@ class RecordSoundViewController: UIViewController {
         audioRecorder.record()
     }
     
-    func stopRecord() {
+    @IBAction func stopRecording(_ sender: UIButton) {
+        recordingLabel.text = "Tap to Record"
+        stopRecordingButton.isEnabled = false
+        recordButton.isEnabled = true
+        
         audioRecorder.stop()
         let audioSession = AVAudioSession.sharedInstance()
         try! audioSession.setActive(false)
     }
+    
+ 
     // MARK: SEGUES
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "stopRecording" {
+        if segue.identifier == segueId {
             let playSoundsVC = segue.destination as! PlaySoundsViewController
             let recordedAudioURL = sender as! URL
             playSoundsVC.recordedAudioURL = recordedAudioURL
         }
     }
+
 }
 
 extension RecordSoundViewController: AVAudioRecorderDelegate {
     
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
         if flag {
-            performSegue(withIdentifier: "stopRecording", sender: audioRecorder.url)
+            performSegue(withIdentifier: segueId, sender: audioRecorder.url)
         } else {
             print("Recording failed")
         }
