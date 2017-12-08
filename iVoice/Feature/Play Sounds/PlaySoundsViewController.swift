@@ -9,12 +9,12 @@
 import UIKit
 import AVFoundation
 
-enum ButtonType: Int {
+private enum ButtonType: Int {
     //tags labeled in storyboard to id buttons
     case slow = 0, fast, chipmunk, vader, echo, reverb
 }
 
-class PlaySoundsViewController: UIViewController {
+internal final class PlaySoundsViewController: UIViewController {
     
     @IBOutlet weak var slowButton: UIButton!
     @IBOutlet weak var fastButton: UIButton!
@@ -44,7 +44,6 @@ class PlaySoundsViewController: UIViewController {
     // MARK: Action
     
     @IBAction func playSoundForButton(_ sender: UIButton) {
-        print("play sound")
         switch (ButtonType(rawValue: sender.tag)!) {
         case .slow:
             playSound(rate: 0.5)
@@ -63,7 +62,6 @@ class PlaySoundsViewController: UIViewController {
     }
     
     @IBAction func stopButtonPressed(_ sender: AnyObject) {
-        print("stop button")
         stopAudio()
     }
 }

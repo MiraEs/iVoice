@@ -9,9 +9,9 @@
 import UIKit
 import AVFoundation
 
-class RecordSoundViewController: UIViewController {
+internal final class RecordSoundViewController: UIViewController {
     
-    let segueId = "stopRecording"
+    fileprivate let segueId = "stopRecording"
     
     @IBOutlet weak var recordButton: UIButton! {
         didSet {
@@ -27,7 +27,7 @@ class RecordSoundViewController: UIViewController {
     
     @IBOutlet weak var recordingLabel: UILabel! {
         didSet {
-            recordingLabel.text = "Tap to Record"
+            recordingLabel.text = Constants.recordingLabel
         }
     }
     
@@ -45,12 +45,12 @@ class RecordSoundViewController: UIViewController {
     
     // MARK: UTILITIES
     @IBAction func recordAudio(_ sender: UIButton) {
-        recordingLabel.text = "Recording.."
+        recordingLabel.text = Constants.recordingNow
         recordButton.isEnabled = false
         stopRecordingButton.isEnabled = true
         
         let dirPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
-        let recordingName = "recordedVoice.wav"
+        let recordingName = Constants.recordingName
         let pathArray = [dirPath, recordingName]
         let filePath = URL(string: pathArray.joined(separator: "/"))
         print(filePath!)
@@ -65,7 +65,7 @@ class RecordSoundViewController: UIViewController {
     }
     
     @IBAction func stopRecording(_ sender: UIButton) {
-        recordingLabel.text = "Tap to Record"
+        recordingLabel.text = Constants.tapToRecord
         stopRecordingButton.isEnabled = false
         recordButton.isEnabled = true
         
